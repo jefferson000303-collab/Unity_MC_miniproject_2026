@@ -1,0 +1,1 @@
+No third-party models, texture images, audio files or fonts are bundled. Unity and Universal Render Pipeline are external dependencies subject to their respective terms. The example UI requests a locally installed operating-system font; no font files are redistributed. This notice does not replace the applicable storefront license.

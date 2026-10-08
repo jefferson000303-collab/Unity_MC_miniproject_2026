@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a20c118a2c27d1b4a93129db4d137278
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 413894
+  packageName: Modern Apartment Interior Pack
+  packageVersion: 1.0
+  assetPath: Assets/ModernJapaneseStudio/Runtime/MJSWalker.cs
+  uploadId: 1011276

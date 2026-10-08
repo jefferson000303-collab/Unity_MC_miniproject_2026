@@ -1,0 +1,12 @@
+Catalog: 174 asset IDs / 174 Unity prefabs. This includes architecture and door variants, not 174 distinct household props.
+Categories: Props 63; Architecture 48; Furniture 19; Bathroom 9; Appliances 8; EverydayProps 8; Fixtures 6; Doors 5; Lighting 4; Electronics 3; Windows 1.
+Geometry: Unity catalog 567,250 triangles; FBX/GLB catalogs 566,950. The unused legacy Interior_Slider_r19 variant has 720 triangles in Unity and 420 in interchange files; this does not affect the three furnished examples. Example assemblies: 1K 257,606; 1LDK 292,046; 1R 261,766 triangles. These are model totals, not measured frame rendering cost.
+Materials: 37. Unity materials use Universal Render Pipeline/Lit.
+Textures: 39 PNG maps: 30 at 1024×1024 and 9 at 2048×2048. Base color, normal and packed ORM maps. UV mapped; no automatic lightmap/LOD claim.
+Motion: 34 separate moving pivots in the catalog; 69 moving instances across the three examples (21/26/22). No skeletal rig or baked animation clips.
+Colliders in Unity: mesh colliders for static surfaces and box colliders for moving parts, plus an example CharacterController.
+Scale: metres; reusable Unity prefab roots have identity transforms. Geometry surfaces retain FBX import transforms below the root.
+Unity: tested 2022.3.5f1; URP 14.0.8; Linear color space; legacy Input Manager or Both. Built-in/HDRP not supplied. No Asset Store package dependency; Universal RP is a Unity Package Manager dependency.
+Standalone demonstration: Windows x64, supplied separately. No mobile, VR, console, macOS or Linux performance/compatibility claim.
+Interchange formats: 177 FBX and 177 GLB files, each format comprising 174 individual assets plus 3 assembled examples. GLB files reference shared external PNGs; keep the supplied folder structure intact. No native Unreal Engine project.
+Blender authoring originals are retained by the owner and are not included in the default store attachments.

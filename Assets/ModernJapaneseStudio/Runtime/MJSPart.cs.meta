@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 955639776c8404a42809a7840a817e4c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 413894
+  packageName: Modern Apartment Interior Pack
+  packageVersion: 1.0
+  assetPath: Assets/ModernJapaneseStudio/Runtime/MJSPart.cs
+  uploadId: 1011276
