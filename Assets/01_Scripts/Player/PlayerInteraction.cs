@@ -7,6 +7,8 @@ public class PlayerInteraction : MonoBehaviour
     public float raycastDistance = 3.0f;
     [Tooltip("상호작용에 사용할 키")]
     public KeyCode interactInput = KeyCode.E;
+    [Tooltip("렌더러 토글에 사용할 키")]
+    public KeyCode ToggleInput = KeyCode.Q;
     [Tooltip("레이저가 유지되는 시간 (초)")]
     public float laserDuration = 1f;
 
@@ -26,6 +28,10 @@ public class PlayerInteraction : MonoBehaviour
     {
         // E 키를 누르는 순간 레이저 발사
         if (Input.GetKeyDown(interactInput))
+        {
+            TryInteract();
+        }
+        if (Input.GetKeyDown(ToggleInput))
         {
             TryInteract();
         }
@@ -59,6 +65,15 @@ public class PlayerInteraction : MonoBehaviour
                 if (Input.GetKeyDown(interactInput))
                 {
                     interactable.Interact();
+                }
+            }
+            // 2. Q 키 토글 체크 (IToggleable)
+            MeshToggle toggleable = hit.collider.GetComponent<MeshToggle>();
+            if (toggleable != null)
+            {
+                if (Input.GetKeyDown(ToggleInput))
+                {
+                    toggleable.MeshToggle();
                 }
             }
         }
