@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1539036074725154159}
   m_Layer: 0
-  m_Name: RoomBase_Modern
+  m_Name: RoomBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
