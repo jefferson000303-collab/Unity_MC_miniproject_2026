@@ -21,8 +21,8 @@ public class UIManager : MonoBehaviour
     public Image[] personaBtnImages; // 인스펙터에서 5개로 맞추고 넣으신 버튼들
 
     [Header("3D Environment (씬에 있는 오브젝트 할당)")]
-    public Light sunLight;
     public GameObject livingRoomModel, bedroomModel, bathroomModel;
+    public SunlightController sunlightController;
 
     // ==================================================
     // [데이터 세팅]
@@ -82,24 +82,16 @@ public class UIManager : MonoBehaviour
 
     public void OnTimeSliderChanged(float time)
     {
-        if (sunLight == null || timeText == null) return;
-
-        // 실시간 그림자 회전 로직
-        float sunAngleX = (time - 6f) * 15f;
-        sunLight.transform.rotation = Quaternion.Euler(sunAngleX, -45f, 0f);
-
-        bool isDay = (time > 5f && time < 19f);
-        if (isDay)
+        if (sunlightController != null)
         {
-            float intensityMultiplier = Mathf.Sin((time - 6f) * Mathf.PI / 12f);
-            sunLight.intensity = Mathf.Max(0.1f, intensityMultiplier * 1.5f);
-        }
-        else
-        {
-            sunLight.intensity = 0.05f;
+            sunlightController.SetTimeOfDay(time);
         }
 
-        timeText.text = $"{Mathf.FloorToInt(time)}시 ({(isDay ? "주간" : "야간")})";
+        if (timeText != null)
+        {
+            bool isDay = (time > 5f && time < 19f);
+            timeText.text = $"{Mathf.FloorToInt(time)}시 ({(isDay ? "주간" : "야간")})";
+        }
     }
 
     public void UpdateBudgetDisplay(int currentTotal)
