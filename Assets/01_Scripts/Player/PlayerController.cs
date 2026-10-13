@@ -8,19 +8,21 @@ public class PlayerController : MonoBehaviour
     private float cameraPitch = 0.0f;
     private Camera playerCamera;
     private bool isCursorLocked = true;
-    private CharacterController controller; // Character Controller 변수 추가
+    private CharacterController controller;
+
+    // 중력 계산을 위한 변수 추가
+    private float verticalVelocity = 0f;
 
     void Start()
     {
         playerCamera = GetComponentInChildren<Camera>();
-        controller = GetComponent<CharacterController>(); // 컴포넌트 가져오기
+        controller = GetComponent<CharacterController>();
 
         UpdateCursorState();
     }
 
     void Update()
     {
-        // ESC 키를 누를 때마다 커서 상태 토글
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             isCursorLocked = !isCursorLocked;
@@ -53,14 +55,33 @@ public class PlayerController : MonoBehaviour
         float moveHorizontal = Input.GetAxis("Horizontal"); // A, D
         float moveVertical = Input.GetAxis("Vertical");     // W, S
 
-        // 플레이어가 바라보는 방향 기준 이동 벡터 계산
-        Vector3 move = transform.right * moveHorizontal + transform.forward * moveVertical;
+        // 1. [핵심] 수평으로만 걷도록 Y축(위아래) 벡터 강제 제거
+        Vector3 forward = transform.forward;
+        forward.y = 0f;
+        forward.Normalize(); // 길이를 1로 다시 맞춤
 
-        // Character Controller를 이용한 이동 (벽 충돌 처리 포함)
-        controller.Move(move * moveSpeed * Time.deltaTime);
+        Vector3 right = transform.right;
+        right.y = 0f;
+        right.Normalize();
 
-        // (선택사항) 만약 중력을 적용하고 싶다면 아래 코드를 활성화하세요 (바닥으로 떨어지게 함)
-        // move.y += Physics.gravity.y * Time.deltaTime;
+        // 2. 평면 이동 방향 계산
+        Vector3 move = right * moveHorizontal + forward * moveVertical;
+        move *= moveSpeed;
+
+        // 3. [핵심] 중력 적용 (공중에 뜨지 않고 바닥에 착 붙도록)
+        if (controller.isGrounded)
+        {
+            verticalVelocity = -2f; // 바닥에 닿아있을 때는 바닥을 살짝 누르는 힘 유지
+        }
+        else
+        {
+            verticalVelocity += Physics.gravity.y * Time.deltaTime; // 공중에 있으면 떨어짐 (-9.81)
+        }
+
+        move.y = verticalVelocity;
+
+        // 4. 최종 이동 실행
+        controller.Move(move * Time.deltaTime);
     }
 
     void HandleMouseLook()
@@ -68,7 +89,7 @@ public class PlayerController : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
-        // 좌우 회전 (플레이어 몸체 회전)
+        // 좌우 회전 (플레이어 몸체 전체가 회전)
         transform.Rotate(Vector3.up * mouseX);
 
         // 상하 회전 (카메라만 고개 숙이기/들기)

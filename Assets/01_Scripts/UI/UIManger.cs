@@ -3,71 +3,78 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("Roof Object Control")]
+    public GameObject roofObject;
     // ==================================================
-    // [Inspector에서 직접 드래그해서 연결할 UI 요소들]
+    // 1. UI 패널 및 요소
     // ==================================================
     [Header("UI Panels (UML 호환)")]
-    public GameObject UI;                 // Canvas 전체
-    public GameObject MiniMap;
+    public GameObject UI;                 // Canvas 전체 (VR 진입 시 꺼짐)
     public GameObject spaceStylingPanel;  // 사용자 지정 믹스 패널
     public GameObject estimatePanel;      // 견적 패널
 
-    [Header("UI Elements (마우스로 끌어다 넣으세요)")]
-    public Text totalCostText;
-    public Text costLivingText, costBedText, costBathText, timeText;
+    [Header("UI Elements")]
+    public Text totalCostText, timeText;
+    public Text costLivingText, costBedText, costBathText;
     public Text mixLivingText, mixBedText, mixBathText;
     public Toggle mixModeToggle;
-    public Slider sunlightSlider;
-    public Image[] personaBtnImages; // 인스펙터에서 5개로 맞추고 넣으신 버튼들
+    public Image[] personaBtnImages;      // 5종 버튼 이미지
 
-    [Header("3D Environment (씬에 있는 오브젝트 할당)")]
-    public GameObject livingRoomModel, bedroomModel, bathroomModel;
+    // ==================================================
+    // 2. 3D 환경 및 방 관리자
+    // ==================================================
+    [Header("3D Environment (실제 방 컨트롤러 할당)")]
+    [Tooltip("각 방의 최상위 오브젝트에 RoomThemeController를 붙이고 여기에 할당하세요")]
+    public RoomThemeController livingRoom;
+    public RoomThemeController bedroom;
+    public RoomThemeController bathroom;
+
+    [Header("외부 컨트롤러 참조")]
     public SunlightController sunlightController;
 
     // ==================================================
-    // [데이터 세팅]
+    // 3. UI ↔ VR 모드 전환 제어
+    // ==================================================
+    [Header("VR Transition (모드 전환)")]
+    [Tooltip("UI 화면을 비출 때 사용할 고정 카메라 (보통 Main Camera)")]
+    public GameObject uiCamera;
+
+    [Tooltip("PlayerController 스크립트가 붙어있는 1인칭 플레이어 오브젝트")]
+    public GameObject vrPlayer;
+
+    [Tooltip("UI 캔버스에 있는 'VR 모드 입장' 버튼을 할당하세요")]
+    public Button enterVRButton;
+
+    // ==================================================
+    // 4. 데이터 세팅
     // ==================================================
     private const int BaseHouseCost = 150000000;
-
-    // 5종 페르소나 데이터 (사운드랩 믹서 포함)
     private readonly int[] costLiving = { 0, 5000000, 7000000, 2000000, 8500000 };
     private readonly int[] costBedroom = { 0, 1500000, 3000000, 2500000, 5000000 };
     private readonly int[] costBath = { 0, 2000000, 2000000, 2000000, 2000000 };
     private readonly string[] personaNames = { "기본 모던", "홈호스트", "테크 노마드", "웰니스 휴식", "사운드랩 믹서" };
 
-    // 5종 3D 방 색상
-    private readonly Color[] livingColors = { Color.gray, new Color(1f, 0.5f, 0f), Color.blue, Color.green, new Color(0.2f, 0.1f, 0.3f) };
-    private readonly Color[] bedColors = { Color.gray, new Color(1f, 0.7f, 0.4f), new Color(0.2f, 0.5f, 1f), new Color(0.5f, 0.8f, 0.5f), new Color(0.3f, 0.2f, 0.5f) };
-    private readonly Color[] bathColors = { Color.gray, new Color(1f, 0.8f, 0.6f), new Color(0.4f, 0.6f, 1f), new Color(0.7f, 0.9f, 0.7f), new Color(0.4f, 0.4f, 0.4f) };
-
-    // 상태 변수
     private int curLiving = 0, curBed = 0, curBath = 0;
     private bool isMixMode = false;
 
     private void Start()
     {
-        // UI 자동 생성 코드 완전 삭제됨 (에러 및 클릭 먹통 원인 제거)
+        if (roofObject != null) roofObject.SetActive(false);
+        // 이벤트 자동 연결
+        if (mixModeToggle != null) mixModeToggle.onValueChanged.AddListener(OnMixToggleChanged);
+        if (enterVRButton != null) enterVRButton.onClick.AddListener(EnterVRMode);
 
-        // 유니티 씬의 기본 환경광 어둡게 (그림자 강조)
-        RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
-        RenderSettings.ambientLight = new Color(0.3f, 0.3f, 0.35f);
+        // ==================================================
+        // [핵심] 시작 시 무조건 UI 모드로 강제 세팅
+        // ==================================================
+        SetUIModeActive();
 
-        // UI 이벤트 자동 연결
-        if (mixModeToggle != null)
-            mixModeToggle.onValueChanged.AddListener(OnMixToggleChanged);
-
-        if (sunlightSlider != null)
-            sunlightSlider.onValueChanged.AddListener(OnTimeSliderChanged);
-
-        // 초기화
-        OnPersonaSelected(0);
-        if (sunlightSlider != null) OnTimeSliderChanged(sunlightSlider.value);
+        OnPersonaSelected(0); // 기본 모던(0번)으로 초기 렌더링
     }
 
     // ==================================================
-    // [외부 노출 이벤트 및 갱신 로직]
+    // UI 조작 이벤트
     // ==================================================
-
     public void OnPersonaSelected(int typeIndex)
     {
         if (isMixMode && mixModeToggle != null) { mixModeToggle.isOn = false; }
@@ -75,17 +82,13 @@ public class UIManager : MonoBehaviour
         UpdateSceneAndCost();
     }
 
-    // 믹스 모드 드롭다운(버튼)이 눌렸을 때 호출할 함수들 (UI 버튼 OnClick에 연결)
     public void CycleLivingMix() { curLiving = (curLiving + 1) % 5; UpdateSceneAndCost(); }
     public void CycleBedMix() { curBed = (curBed + 1) % 5; UpdateSceneAndCost(); }
     public void CycleBathMix() { curBath = (curBath + 1) % 5; UpdateSceneAndCost(); }
 
     public void OnTimeSliderChanged(float time)
     {
-        if (sunlightController != null)
-        {
-            sunlightController.SetTimeOfDay(time);
-        }
+        if (sunlightController != null) sunlightController.SetTimeOfDay(time);
 
         if (timeText != null)
         {
@@ -94,39 +97,33 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateBudgetDisplay(int currentTotal)
-    {
-        if (totalCostText != null) totalCostText.text = $"{currentTotal:N0} 원";
-    }
-
+    // ==================================================
+    // 각 방(Room) 가구 갱신 및 UI 텍스트 업데이트
+    // ==================================================
     private void UpdateSceneAndCost()
     {
-        // 3D 모델 색상 갱신
-        if (livingRoomModel != null) livingRoomModel.GetComponent<Renderer>().material.color = livingColors[curLiving];
-        if (bedroomModel != null) bedroomModel.GetComponent<Renderer>().material.color = bedColors[curBed];
-        if (bathroomModel != null) bathroomModel.GetComponent<Renderer>().material.color = bathColors[curBath];
+        // 1. 방별 컨트롤러에 테마 번호 전달
+        if (livingRoom != null) livingRoom.SetTheme(curLiving);
+        if (bedroom != null) bedroom.SetTheme(curBed);
+        if (bathroom != null) bathroom.SetTheme(curBath);
 
-        // 5개 버튼 액티브 하이라이트 처리
+        // 2. UI 텍스트 및 하이라이트 갱신
         Color activeBlue = new Color(0.86f, 0.94f, 1f);
         for (int i = 0; i < personaBtnImages.Length; i++)
         {
             if (personaBtnImages[i] == null) continue;
-            if (!isMixMode && i == curLiving) personaBtnImages[i].color = activeBlue;
-            else personaBtnImages[i].color = Color.white;
+            personaBtnImages[i].color = (!isMixMode && i == curLiving) ? activeBlue : Color.white;
         }
 
-        // 텍스트 갱신
-        if (mixLivingText != null) mixLivingText.text = $"{personaNames[curLiving]} (+{costLiving[curLiving] / 10000}만원)   ▼ 클릭";
-        if (mixBedText != null) mixBedText.text = $"{personaNames[curBed]} (+{costBedroom[curBed] / 10000}만원)   ▼ 클릭";
-        if (mixBathText != null) mixBathText.text = $"{personaNames[curBath]} (+{costBath[curBath] / 10000}만원)   ▼ 클릭";
+        if (mixLivingText != null) mixLivingText.text = $"{personaNames[curLiving]} (+{costLiving[curLiving] / 10000}만원) ▼ 변경";
+        if (mixBedText != null) mixBedText.text = $"{personaNames[curBed]} (+{costBedroom[curBed] / 10000}만원) ▼ 변경";
+        if (mixBathText != null) mixBathText.text = $"{personaNames[curBath]} (+{costBath[curBath] / 10000}만원) ▼ 변경";
 
-        int cLiv = costLiving[curLiving], cBed = costBedroom[curBed], cBath = costBath[curBath];
-
-        if (costLivingText != null) costLivingText.text = $"+{cLiv:N0} 원";
-        if (costBedText != null) costBedText.text = $"+{cBed:N0} 원";
-        if (costBathText != null) costBathText.text = $"+{cBath:N0} 원";
-
-        UpdateBudgetDisplay(BaseHouseCost + cLiv + cBed + cBath);
+        int totalAdditional = costLiving[curLiving] + costBedroom[curBed] + costBath[curBath];
+        if (costLivingText != null) costLivingText.text = $"+{costLiving[curLiving]:N0} 원";
+        if (costBedText != null) costBedText.text = $"+{costBedroom[curBed]:N0} 원";
+        if (costBathText != null) costBathText.text = $"+{costBath[curBath]:N0} 원";
+        if (totalCostText != null) totalCostText.text = $"{BaseHouseCost + totalAdditional:N0} 원";
     }
 
     private void OnMixToggleChanged(bool isOn)
@@ -134,5 +131,65 @@ public class UIManager : MonoBehaviour
         isMixMode = isOn;
         if (spaceStylingPanel != null) spaceStylingPanel.SetActive(isOn);
         UpdateSceneAndCost();
+    }
+
+    // ==================================================
+    // 모드 전환 로직 (UI ↔ VR)
+    // ==================================================
+
+    // 처음에 UI를 조작하기 위한 세팅
+    private void SetUIModeActive()
+    {
+        // 1. 1인칭 플레이어 끄기
+        if (vrPlayer != null) vrPlayer.SetActive(false);
+
+        // 2. 고정 카메라와 UI 켜기
+        if (uiCamera != null) uiCamera.SetActive(true);
+        if (UI != null) UI.SetActive(true);
+
+        if (roofObject != null) roofObject.SetActive(false);
+
+        // 3. 마우스 커서 잠금 해제 (UI 클릭을 위해)
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    // "VR 모드 입장" 버튼을 눌렀을 때 실행되는 함수
+    public void EnterVRMode()
+    {
+        // 1. 고정 카메라와 UI 끄기
+        if (uiCamera != null) uiCamera.SetActive(false);
+        if (UI != null) UI.SetActive(false);
+
+        // 2. 1인칭 플레이어 켜기 (켜지는 순간 PlayerController의 Start()가 실행됨)
+        if (vrPlayer != null) vrPlayer.SetActive(true);
+
+        if (roofObject != null) roofObject.SetActive(true);
+
+        // PlayerController.cs 내부에서 마우스 커서를 잠그도록 되어있으므로,
+        // 여기서는 플레이어 오브젝트만 켜주면 알아서 1인칭 조작으로 넘어갑니다.
+
+        Debug.Log("VR 1인칭 모드로 진입했습니다! (ESC를 눌러 마우스를 켤 수 있습니다)");
+    }
+
+    public void SetTopViewMode()
+    {
+        // ... (기존 탑뷰 카메라 전환 코드) ...
+
+        if (roofObject != null)
+        {
+            roofObject.SetActive(false); // 지붕 숨기기
+        }
+    }
+
+    // 2. VR 모드 진입 시 (지붕 켜기)
+    public void SetVRMode()
+    {
+        // ... (기존 VR/Player 카메라 전환 코드) ...
+
+        if (roofObject != null)
+        {
+            roofObject.SetActive(true); // 지붕 다시 보이기
+        }
     }
 }

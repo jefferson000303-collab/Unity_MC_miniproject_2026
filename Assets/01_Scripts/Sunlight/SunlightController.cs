@@ -8,7 +8,10 @@ public class SunlightController : MonoBehaviour
 
     public void SetTimeOfDay(float time)
     {
-        if (sunLight == null) return;
+        if (sunLight == null)
+      
+            return;
+        
 
         // 실시간 그림자 회전 로직
         float sunAngleX = (time - 6f) * 15f;
@@ -25,5 +28,6 @@ public class SunlightController : MonoBehaviour
         {
             sunLight.intensity = 0.05f;
         }
+        
     }
 }
