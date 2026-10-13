@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -6,53 +6,53 @@ public class UIManager : MonoBehaviour
     [Header("Roof Object Control")]
     public GameObject roofObject;
     // ==================================================
-    // 1. UI ÆÐ³Î ¹× ¿ä¼Ò
+    // 1. UI íŒ¨ë„ ë° ìš”ì†Œ
     // ==================================================
-    [Header("UI Panels (UML È£È¯)")]
-    public GameObject UI;                 // Canvas ÀüÃ¼ (VR ÁøÀÔ ½Ã ²¨Áü)
-    public GameObject spaceStylingPanel;  // »ç¿ëÀÚ ÁöÁ¤ ¹Í½º ÆÐ³Î
-    public GameObject estimatePanel;      // °ßÀû ÆÐ³Î
+    [Header("UI Panels (UML í˜¸í™˜)")]
+    public GameObject UI;                 // Canvas ì „ì²´ (VR ì§„ìž… ì‹œ êº¼ì§)
+    public GameObject spaceStylingPanel;  // ì‚¬ìš©ìž ì§€ì • ë¯¹ìŠ¤ íŒ¨ë„
+    public GameObject estimatePanel;      // ê²¬ì  íŒ¨ë„
 
     [Header("UI Elements")]
     public Text totalCostText, timeText;
     public Text costLivingText, costBedText, costBathText;
     public Text mixLivingText, mixBedText, mixBathText;
     public Toggle mixModeToggle;
-    public Image[] personaBtnImages;      // 5Á¾ ¹öÆ° ÀÌ¹ÌÁö
+    public Image[] personaBtnImages;      // 5ì¢… ë²„íŠ¼ ì´ë¯¸ì§€
 
     // ==================================================
-    // 2. 3D È¯°æ ¹× ¹æ °ü¸®ÀÚ
+    // 2. 3D í™˜ê²½ ë° ë°© ê´€ë¦¬ìž
     // ==================================================
-    [Header("3D Environment (½ÇÁ¦ ¹æ ÄÁÆ®·Ñ·¯ ÇÒ´ç)")]
-    [Tooltip("°¢ ¹æÀÇ ÃÖ»óÀ§ ¿ÀºêÁ§Æ®¿¡ RoomThemeController¸¦ ºÙÀÌ°í ¿©±â¿¡ ÇÒ´çÇÏ¼¼¿ä")]
+    [Header("3D Environment (ì‹¤ì œ ë°© ì»¨íŠ¸ë¡¤ëŸ¬ í• ë‹¹)")]
+    [Tooltip("ê° ë°©ì˜ ìµœìƒìœ„ ì˜¤ë¸Œì íŠ¸ì— RoomThemeControllerë¥¼ ë¶™ì´ê³  ì—¬ê¸°ì— í• ë‹¹í•˜ì„¸ìš”")]
     public RoomThemeController livingRoom;
     public RoomThemeController bedroom;
     public RoomThemeController bathroom;
 
-    [Header("¿ÜºÎ ÄÁÆ®·Ñ·¯ ÂüÁ¶")]
+    [Header("ì™¸ë¶€ ì»¨íŠ¸ë¡¤ëŸ¬ ì°¸ì¡°")]
     public SunlightController sunlightController;
 
     // ==================================================
-    // 3. UI ¡ê VR ¸ðµå ÀüÈ¯ Á¦¾î
+    // 3. UI â†” VR ëª¨ë“œ ì „í™˜ ì œì–´
     // ==================================================
-    [Header("VR Transition (¸ðµå ÀüÈ¯)")]
-    [Tooltip("UI È­¸éÀ» ºñÃâ ¶§ »ç¿ëÇÒ °íÁ¤ Ä«¸Þ¶ó (º¸Åë Main Camera)")]
+    [Header("VR Transition (ëª¨ë“œ ì „í™˜)")]
+    [Tooltip("UI í™”ë©´ì„ ë¹„ì¶œ ë•Œ ì‚¬ìš©í•  ê³ ì • ì¹´ë©”ë¼ (ë³´í†µ Main Camera)")]
     public GameObject uiCamera;
 
-    [Tooltip("PlayerController ½ºÅ©¸³Æ®°¡ ºÙ¾îÀÖ´Â 1ÀÎÄª ÇÃ·¹ÀÌ¾î ¿ÀºêÁ§Æ®")]
+    [Tooltip("PlayerController ìŠ¤í¬ë¦½íŠ¸ê°€ ë¶™ì–´ìžˆëŠ” 1ì¸ì¹­ í”Œë ˆì´ì–´ ì˜¤ë¸Œì íŠ¸")]
     public GameObject vrPlayer;
 
-    [Tooltip("UI Äµ¹ö½º¿¡ ÀÖ´Â 'VR ¸ðµå ÀÔÀå' ¹öÆ°À» ÇÒ´çÇÏ¼¼¿ä")]
+    [Tooltip("UI ìº”ë²„ìŠ¤ì— ìžˆëŠ” 'VR ëª¨ë“œ ìž…ìž¥' ë²„íŠ¼ì„ í• ë‹¹í•˜ì„¸ìš”")]
     public Button enterVRButton;
 
     // ==================================================
-    // 4. µ¥ÀÌÅÍ ¼¼ÆÃ
+    // 4. ë°ì´í„° ì„¸íŒ…
     // ==================================================
     private const int BaseHouseCost = 150000000;
     private readonly int[] costLiving = { 0, 5000000, 7000000, 2000000, 8500000 };
     private readonly int[] costBedroom = { 0, 1500000, 3000000, 2500000, 5000000 };
     private readonly int[] costBath = { 0, 2000000, 2000000, 2000000, 2000000 };
-    private readonly string[] personaNames = { "±âº» ¸ð´ø", "È¨È£½ºÆ®", "Å×Å© ³ë¸¶µå", "À£´Ï½º ÈÞ½Ä", "»ç¿îµå·¦ ¹Í¼­" };
+    private readonly string[] personaNames = { "ê¸°ë³¸ ëª¨ë˜", "í™ˆí˜¸ìŠ¤íŠ¸", "í…Œí¬ ë…¸ë§ˆë“œ", "ì›°ë‹ˆìŠ¤ íœ´ì‹", "ì‚¬ìš´ë“œëž© ë¯¹ì„œ" };
 
     private int curLiving = 0, curBed = 0, curBath = 0;
     private bool isMixMode = false;
@@ -60,20 +60,27 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         if (roofObject != null) roofObject.SetActive(false);
-        // ÀÌº¥Æ® ÀÚµ¿ ¿¬°á
+        // ì´ë²¤íŠ¸ ìžë™ ì—°ê²°
         if (mixModeToggle != null) mixModeToggle.onValueChanged.AddListener(OnMixToggleChanged);
         if (enterVRButton != null) enterVRButton.onClick.AddListener(EnterVRMode);
 
         // ==================================================
-        // [ÇÙ½É] ½ÃÀÛ ½Ã ¹«Á¶°Ç UI ¸ðµå·Î °­Á¦ ¼¼ÆÃ
+        // [í•µì‹¬] ì‹œìž‘ ì‹œ ë¬´ì¡°ê±´ UI ëª¨ë“œë¡œ ê°•ì œ ì„¸íŒ…
         // ==================================================
         SetUIModeActive();
 
-        OnPersonaSelected(0); // ±âº» ¸ð´ø(0¹ø)À¸·Î ÃÊ±â ·»´õ¸µ
+        OnPersonaSelected(0); // ê¸°ë³¸ ëª¨ë˜(0ë²ˆ)ìœ¼ë¡œ ì´ˆê¸° ë Œë”ë§
     }
-
+    private void Update()
+    {
+        // ðŸ’¡ 1ì¸ì¹­(VR) í”Œë ˆì´ì–´ê°€ ì¼œì ¸ ìžˆëŠ” ìƒíƒœì—ì„œ ESC í‚¤ë¥¼ ëˆ„ë¥´ë©´ ë‹¤ì‹œ UI ìƒíƒœë¡œ ë³µê·€
+        if (vrPlayer != null && vrPlayer.activeSelf && Input.GetKeyDown(KeyCode.Escape))
+        {
+            SetUIModeActive();
+        }
+    }
     // ==================================================
-    // UI Á¶ÀÛ ÀÌº¥Æ®
+    // UI ì¡°ìž‘ ì´ë²¤íŠ¸
     // ==================================================
     public void OnPersonaSelected(int typeIndex)
     {
@@ -93,21 +100,21 @@ public class UIManager : MonoBehaviour
         if (timeText != null)
         {
             bool isDay = (time > 5f && time < 19f);
-            timeText.text = $"{Mathf.FloorToInt(time)}½Ã ({(isDay ? "ÁÖ°£" : "¾ß°£")})";
+            timeText.text = $"{Mathf.FloorToInt(time)}ì‹œ ({(isDay ? "ì£¼ê°„" : "ì•¼ê°„")})";
         }
     }
 
     // ==================================================
-    // °¢ ¹æ(Room) °¡±¸ °»½Å ¹× UI ÅØ½ºÆ® ¾÷µ¥ÀÌÆ®
+    // ê° ë°©(Room) ê°€êµ¬ ê°±ì‹  ë° UI í…ìŠ¤íŠ¸ ì—…ë°ì´íŠ¸
     // ==================================================
     private void UpdateSceneAndCost()
     {
-        // 1. ¹æº° ÄÁÆ®·Ñ·¯¿¡ Å×¸¶ ¹øÈ£ Àü´Þ
+        // 1. ë°©ë³„ ì»¨íŠ¸ë¡¤ëŸ¬ì— í…Œë§ˆ ë²ˆí˜¸ ì „ë‹¬
         if (livingRoom != null) livingRoom.SetTheme(curLiving);
         if (bedroom != null) bedroom.SetTheme(curBed);
         if (bathroom != null) bathroom.SetTheme(curBath);
 
-        // 2. UI ÅØ½ºÆ® ¹× ÇÏÀÌ¶óÀÌÆ® °»½Å
+        // 2. UI í…ìŠ¤íŠ¸ ë° í•˜ì´ë¼ì´íŠ¸ ê°±ì‹ 
         Color activeBlue = new Color(0.86f, 0.94f, 1f);
         for (int i = 0; i < personaBtnImages.Length; i++)
         {
@@ -115,15 +122,15 @@ public class UIManager : MonoBehaviour
             personaBtnImages[i].color = (!isMixMode && i == curLiving) ? activeBlue : Color.white;
         }
 
-        if (mixLivingText != null) mixLivingText.text = $"{personaNames[curLiving]} (+{costLiving[curLiving] / 10000}¸¸¿ø) ¡å º¯°æ";
-        if (mixBedText != null) mixBedText.text = $"{personaNames[curBed]} (+{costBedroom[curBed] / 10000}¸¸¿ø) ¡å º¯°æ";
-        if (mixBathText != null) mixBathText.text = $"{personaNames[curBath]} (+{costBath[curBath] / 10000}¸¸¿ø) ¡å º¯°æ";
+        if (mixLivingText != null) mixLivingText.text = $"{personaNames[curLiving]} (+{costLiving[curLiving] / 10000}ë§Œì›) â–¼ ë³€ê²½";
+        if (mixBedText != null) mixBedText.text = $"{personaNames[curBed]} (+{costBedroom[curBed] / 10000}ë§Œì›) â–¼ ë³€ê²½";
+        if (mixBathText != null) mixBathText.text = $"{personaNames[curBath]} (+{costBath[curBath] / 10000}ë§Œì›) â–¼ ë³€ê²½";
 
         int totalAdditional = costLiving[curLiving] + costBedroom[curBed] + costBath[curBath];
-        if (costLivingText != null) costLivingText.text = $"+{costLiving[curLiving]:N0} ¿ø";
-        if (costBedText != null) costBedText.text = $"+{costBedroom[curBed]:N0} ¿ø";
-        if (costBathText != null) costBathText.text = $"+{costBath[curBath]:N0} ¿ø";
-        if (totalCostText != null) totalCostText.text = $"{BaseHouseCost + totalAdditional:N0} ¿ø";
+        if (costLivingText != null) costLivingText.text = $"+{costLiving[curLiving]:N0} ì›";
+        if (costBedText != null) costBedText.text = $"+{costBedroom[curBed]:N0} ì›";
+        if (costBathText != null) costBathText.text = $"+{costBath[curBath]:N0} ì›";
+        if (totalCostText != null) totalCostText.text = $"{BaseHouseCost + totalAdditional:N0} ì›";
     }
 
     private void OnMixToggleChanged(bool isOn)
@@ -134,62 +141,62 @@ public class UIManager : MonoBehaviour
     }
 
     // ==================================================
-    // ¸ðµå ÀüÈ¯ ·ÎÁ÷ (UI ¡ê VR)
+    // ëª¨ë“œ ì „í™˜ ë¡œì§ (UI â†” VR)
     // ==================================================
 
-    // Ã³À½¿¡ UI¸¦ Á¶ÀÛÇÏ±â À§ÇÑ ¼¼ÆÃ
+    // ì²˜ìŒì— UIë¥¼ ì¡°ìž‘í•˜ê¸° ìœ„í•œ ì„¸íŒ…
     private void SetUIModeActive()
     {
-        // 1. 1ÀÎÄª ÇÃ·¹ÀÌ¾î ²ô±â
+        // 1. 1ì¸ì¹­ í”Œë ˆì´ì–´ ë„ê¸°
         if (vrPlayer != null) vrPlayer.SetActive(false);
 
-        // 2. °íÁ¤ Ä«¸Þ¶ó¿Í UI ÄÑ±â
+        // 2. ê³ ì • ì¹´ë©”ë¼ì™€ UI ì¼œê¸°
         if (uiCamera != null) uiCamera.SetActive(true);
         if (UI != null) UI.SetActive(true);
 
         if (roofObject != null) roofObject.SetActive(false);
 
-        // 3. ¸¶¿ì½º Ä¿¼­ Àá±Ý ÇØÁ¦ (UI Å¬¸¯À» À§ÇØ)
+        // 3. ë§ˆìš°ìŠ¤ ì»¤ì„œ ìž ê¸ˆ í•´ì œ (UI í´ë¦­ì„ ìœ„í•´)
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
-    // "VR ¸ðµå ÀÔÀå" ¹öÆ°À» ´­·¶À» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    // "VR ëª¨ë“œ ìž…ìž¥" ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     public void EnterVRMode()
     {
-        // 1. °íÁ¤ Ä«¸Þ¶ó¿Í UI ²ô±â
+        // 1. ê³ ì • ì¹´ë©”ë¼ì™€ UI ë„ê¸°
         if (uiCamera != null) uiCamera.SetActive(false);
         if (UI != null) UI.SetActive(false);
 
-        // 2. 1ÀÎÄª ÇÃ·¹ÀÌ¾î ÄÑ±â (ÄÑÁö´Â ¼ø°£ PlayerControllerÀÇ Start()°¡ ½ÇÇàµÊ)
+        // 2. 1ì¸ì¹­ í”Œë ˆì´ì–´ ì¼œê¸° (ì¼œì§€ëŠ” ìˆœê°„ PlayerControllerì˜ Start()ê°€ ì‹¤í–‰ë¨)
         if (vrPlayer != null) vrPlayer.SetActive(true);
 
         if (roofObject != null) roofObject.SetActive(true);
 
-        // PlayerController.cs ³»ºÎ¿¡¼­ ¸¶¿ì½º Ä¿¼­¸¦ Àá±×µµ·Ï µÇ¾îÀÖÀ¸¹Ç·Î,
-        // ¿©±â¼­´Â ÇÃ·¹ÀÌ¾î ¿ÀºêÁ§Æ®¸¸ ÄÑÁÖ¸é ¾Ë¾Æ¼­ 1ÀÎÄª Á¶ÀÛÀ¸·Î ³Ñ¾î°©´Ï´Ù.
+        // PlayerController.cs ë‚´ë¶€ì—ì„œ ë§ˆìš°ìŠ¤ ì»¤ì„œë¥¼ ìž ê·¸ë„ë¡ ë˜ì–´ìžˆìœ¼ë¯€ë¡œ,
+        // ì—¬ê¸°ì„œëŠ” í”Œë ˆì´ì–´ ì˜¤ë¸Œì íŠ¸ë§Œ ì¼œì£¼ë©´ ì•Œì•„ì„œ 1ì¸ì¹­ ì¡°ìž‘ìœ¼ë¡œ ë„˜ì–´ê°‘ë‹ˆë‹¤.
 
-        Debug.Log("VR 1ÀÎÄª ¸ðµå·Î ÁøÀÔÇß½À´Ï´Ù! (ESC¸¦ ´­·¯ ¸¶¿ì½º¸¦ ÄÓ ¼ö ÀÖ½À´Ï´Ù)");
+        Debug.Log("VR 1ì¸ì¹­ ëª¨ë“œë¡œ ì§„ìž…í–ˆìŠµë‹ˆë‹¤! (ESCë¥¼ ëˆŒëŸ¬ ë§ˆìš°ìŠ¤ë¥¼ ì¼¤ ìˆ˜ ìžˆìŠµë‹ˆë‹¤)");
     }
 
     public void SetTopViewMode()
     {
-        // ... (±âÁ¸ Å¾ºä Ä«¸Þ¶ó ÀüÈ¯ ÄÚµå) ...
+        // ... (ê¸°ì¡´ íƒ‘ë·° ì¹´ë©”ë¼ ì „í™˜ ì½”ë“œ) ...
 
         if (roofObject != null)
         {
-            roofObject.SetActive(false); // ÁöºØ ¼û±â±â
+            roofObject.SetActive(false); // ì§€ë¶• ìˆ¨ê¸°ê¸°
         }
     }
 
-    // 2. VR ¸ðµå ÁøÀÔ ½Ã (ÁöºØ ÄÑ±â)
+    // 2. VR ëª¨ë“œ ì§„ìž… ì‹œ (ì§€ë¶• ì¼œê¸°)
     public void SetVRMode()
     {
-        // ... (±âÁ¸ VR/Player Ä«¸Þ¶ó ÀüÈ¯ ÄÚµå) ...
+        // ... (ê¸°ì¡´ VR/Player ì¹´ë©”ë¼ ì „í™˜ ì½”ë“œ) ...
 
         if (roofObject != null)
         {
-            roofObject.SetActive(true); // ÁöºØ ´Ù½Ã º¸ÀÌ±â
+            roofObject.SetActive(true); // ì§€ë¶• ë‹¤ì‹œ ë³´ì´ê¸°
         }
     }
 }
