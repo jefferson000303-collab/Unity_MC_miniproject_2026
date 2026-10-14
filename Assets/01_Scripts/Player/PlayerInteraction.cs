@@ -4,7 +4,7 @@ public class PlayerInteraction : MonoBehaviour
 {
     [Header("Interaction Settings")]
     [Tooltip("레이캐스트 최대 탐지 거리")]
-    public float raycastDistance = 5.0f;
+    public float raycastDistance = 7.0f;
     [Header("Key Settings")]
     [Tooltip("일반 상호작용 키 (문 열기 등)")]
     public KeyCode interactKey = KeyCode.E;
